@@ -1,6 +1,8 @@
 package domain.frame
 
 class Frame[T](private val frame: Seq[Seq[T]]) {
+  def this() = this(Seq())
+  
   private val width: Int = if (frame.nonEmpty) frame.head.length else 0
   private val height: Int = frame.length
 

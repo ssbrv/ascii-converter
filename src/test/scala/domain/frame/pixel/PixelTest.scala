@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class PixelTest extends AnyFunSuite {
   def testValidPixel(red: Int, green: Int, blue: Int): Unit = {
-    test(s"Does not throw an exception when constructing pixel with valid values ($red, $green, $blue)") {
+    test(s"Constructing pixel ($red, $green, $blue) succeeds") {
       val pixel = new Pixel(red, green, blue)
       assert(pixel.red == red)
       assert(pixel.green == green)
@@ -18,7 +18,7 @@ class PixelTest extends AnyFunSuite {
 
 
   def testValidPixelColorModel(rgb: Int, red: Int, green: Int, blue: Int): Unit = {
-    test(s"Does not throw an exception when constructing pixel with valid RGB value in color model and RGB values match ($rgb = $red, $green, $blue)") {
+    test(s"Constructing pixel ($rgb) succeeds and RGB values match ($red, $green, $blue)") {
       val pixel = new Pixel(rgb)
       assert(pixel.red == red)
       assert(pixel.green == green)
@@ -32,7 +32,7 @@ class PixelTest extends AnyFunSuite {
 
 
   def testInvalidPixel(red: Int, green: Int, blue: Int): Unit = {
-    test(s"Throws an exception when constructing pixel with invalid values ($red, $green, $blue)") {
+    test(s"Constructing pixel ($red, $green, $blue) throws an exception") {
       assertThrows[Exception] {
         new Pixel(red, green, blue)
       }
@@ -48,7 +48,7 @@ class PixelTest extends AnyFunSuite {
 
 
   def testGreyscale(red: Int, green: Int, blue: Int, greyscale: Int): Unit = {
-    test(s"Greyscale of ($red, $green, $blue) is ${greyscale}") {
+    test(s"Greyscale of pixel ($red, $green, $blue) is ${greyscale}") {
       val pixel = new Pixel(red, green, blue)
       assert(pixel.greyscale == greyscale)
     }

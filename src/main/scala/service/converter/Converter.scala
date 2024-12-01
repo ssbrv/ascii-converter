@@ -12,7 +12,7 @@ trait Converter {
         new Frame(
           for (y <- 0 until frame.getHeight) yield
             for (x <- 0 until frame.getWidth) yield
-              convert(frame(x)(y).getGreyscale)
+              convert(frame(x)(y).greyscale)
         )
     )
   }

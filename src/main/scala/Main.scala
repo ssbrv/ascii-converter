@@ -1,17 +1,27 @@
-import controller.argument.ArgumentController
-import service.argument.DoubleDashArgumentService
-import service.command.{ConvertCommandService, ExportCommandService, FilterCommandService, ImportCommandService}
+
+import converter.mapper.ConverterMapper
+import exporter.mapper.ExporterMapper
+import filter.ascii.mapper.AsciiFilterMapper
+import parser.service.asset.AssetParserImpl
+import parser.service.command.{CommandParser, DoubleDashCommandParser}
+import source.mapper.SourceMapper
 
 @main def main(arguments: String*): Unit = {
-  if (arguments.isEmpty)
-    throw new IllegalArgumentException("No arguments provided.")
 
-  val argumentController = new ArgumentController(
-    new DoubleDashArgumentService,
-    new ImportCommandService,
-    new ConvertCommandService,
-    new FilterCommandService,
-    new ExportCommandService
+  val sourceMapper = new SourceMapper
+  val converterMapper = new ConverterMapper
+  val asciiFilterMapper = new AsciiFilterMapper
+  val exporterMapper = new ExporterMapper
+
+  val assetParser = new AssetParserImpl(
+    sourceMapper, converterMapper, asciiFilterMapper, exporterMapper
   )
-  val (importer, converter, filters, exporters) = argumentController.parse(arguments)
+
+  val commandParser: CommandParser = new DoubleDashCommandParser
+
+  val applicationController = ApplicationController(
+    commandParser, assetParser
+  )
+
+  applicationController.run(arguments)
 }

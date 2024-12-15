@@ -14,7 +14,7 @@ class InvertFilter extends GreyscaleMediaFilter {
               invert(frame(x)(y))
         )
 
-    new GreyscaleMedia(frames)
+    new GreyscaleMedia(frames, media.frameDelay)
   }
 
   private def invert(greyscale: GreyscaleValue): GreyscaleValue = GreyscaleValue(GreyscaleValue.MAX_VALUE - greyscale.value)

@@ -13,7 +13,7 @@ abstract class MediaConverterImpl[F, T] extends MediaConverter[F, T] {
               convert(frame(x)(y))
         )
 
-    new Media[T](frames)
+    new Media[T](frames, media.frameDelay)
   }
   
   protected def convert(value: F): T

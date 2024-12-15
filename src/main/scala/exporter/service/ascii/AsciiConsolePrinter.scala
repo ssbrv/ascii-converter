@@ -22,10 +22,12 @@ class AsciiConsolePrinter extends AsciiExporter {
   }
 
   private def animateAscii(ascii: AsciiMedia): Unit = {
+    val frameDelayMs = ascii.frameDelay * 10
+
     for (frame <- ascii) {
-      clearConsole()
-      printAsciiFrame(frame)
-      Thread.sleep(50) // TODO: replace with media frame rate
+       clearConsole()
+       printAsciiFrame(frame)
+       Thread.sleep(frameDelayMs)
     }
   }
 

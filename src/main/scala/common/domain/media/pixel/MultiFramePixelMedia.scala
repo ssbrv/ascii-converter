@@ -5,7 +5,7 @@ import common.domain.pixel.Pixel
 
 import java.awt.image.BufferedImage
 
-class MultiFramePixelMedia(bufferedImages: Seq[BufferedImage]) extends PixelMedia(
+class MultiFramePixelMedia(bufferedImages: Seq[BufferedImage], frameDelay: Int) extends PixelMedia(
   bufferedImages.map { bufferedImage =>
     val pixels = (0 until bufferedImage.getHeight).map { y =>
       (0 until bufferedImage.getWidth).map { x =>
@@ -13,5 +13,6 @@ class MultiFramePixelMedia(bufferedImages: Seq[BufferedImage]) extends PixelMedi
       }
     }
     new PixelFrame(pixels)
-  }  
+  },
+  frameDelay
 )

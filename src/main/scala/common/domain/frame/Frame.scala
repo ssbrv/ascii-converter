@@ -1,10 +1,10 @@
 package common.domain.frame
 
-class Frame[T](private val frame: Seq[Seq[T]]) extends Iterable[Seq[T]] {
+class Frame[T](protected val frame: Seq[Seq[T]]) extends Iterable[Seq[T]] {
   def this() = this(Seq())
   
-  private val width: Int = if (frame.nonEmpty) frame.head.length else 0
-  private val height: Int = frame.length
+  protected val width: Int = if (frame.nonEmpty) frame.head.length else 0
+  protected val height: Int = frame.length
 
   require(frame.forall(_.length == width), "All rows must have the same length")
 

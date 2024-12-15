@@ -4,7 +4,7 @@ import common.mapper.AssetMapper
 import parser.domain.AssetHandler
 import source.service.MediaSource
 import source.service.importer.{ImageImporter, MultiFramerImporter}
-import source.service.randomgenerator.{RandomImageGenerator, SmallImageGenerator}
+import source.service.random.{RandomImageGenerator, SmallImageGenerator}
 
 import java.io.File
 import java.nio.file.Files
@@ -53,12 +53,18 @@ class SourceMapper extends AssetMapper[MediaSource] {
       throw new NumberFormatException(s"First parameter of generate command is not a number: ${params.head}. Number is expected.")
     }
 
+    require(from > 0, s"First parameter of generate command is not a positive number: $from. Positive number is expected.")
+
     val to = try {
       params(1).toInt
     } catch {
       case e: NumberFormatException =>
         throw new NumberFormatException(s"Second parameter of generate command is not a number: ${params(1)}. Number is expected.")
     }
+    
+    require(to > 0, s"Second parameter of generate command is not a positive number: $to. Positive number is expected.")
+
+    require(from <= to , s"Provided invalid range for generate random image command: $from-$to. Expected valid range, where from <= to")
 
     new RandomImageGenerator(from, from, to, to)
   }

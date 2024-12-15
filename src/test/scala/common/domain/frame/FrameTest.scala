@@ -1,6 +1,5 @@
 package common.domain.frame
 
-import common.domain.frame.Frame
 import org.scalatest.funsuite.AnyFunSuite
 
 class FrameTest extends AnyFunSuite {

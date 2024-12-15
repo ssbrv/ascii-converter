@@ -1,9 +1,10 @@
 package parser.service.asset
 
 import common.mapper.AssetMapper
-import converter.service.AsciiConverter
-import exporter.service.AsciiExporter
-import filter.ascii.service.AsciiFilter
+import converter.service.ascii.AsciiConverter
+import exporter.service.ascii.AsciiExporter
+import filter.service.ascii.AsciiFilter
+import filter.service.greyscale.GreyscaleMediaFilter
 import parser.domain.Command
 import parser.service.command.CommandParser
 import parser.utils.CommandStream
@@ -11,13 +12,15 @@ import source.service.MediaSource
 
 class AssetParserImpl(private val sourceMapper: AssetMapper[MediaSource],
                       private val converterMapper: AssetMapper[AsciiConverter],
+                      private val greyscaleMediaFilterMapper: AssetMapper[GreyscaleMediaFilter],
                       private val asciiFilterMapper: AssetMapper[AsciiFilter],
                       private val exporterMapper: AssetMapper[AsciiExporter]) extends AssetParser {
 
-  override def parseArgumentsIntoAssets(commands: Seq[Command]): (MediaSource, AsciiConverter, Seq[AsciiFilter], AsciiExporter) = {
+  override def parseArgumentsIntoAssets(commands: Seq[Command]): (MediaSource, AsciiConverter, Seq[GreyscaleMediaFilter], Seq[AsciiFilter], AsciiExporter) = {
     val commandStream = new CommandStream(commands)
     val sources = commandStream.streamThroughMapper(sourceMapper)
     val converters = commandStream.streamThroughMapper(converterMapper)
+    val greyscaleMediaFilters = commandStream.streamThroughMapper(greyscaleMediaFilterMapper)
     val asciiFilters = commandStream.streamThroughMapper(asciiFilterMapper)
     val exporters = commandStream.streamThroughMapper(exporterMapper)
     val unknownCommands = commandStream.getCurrent
@@ -51,6 +54,6 @@ class AssetParserImpl(private val sourceMapper: AssetMapper[MediaSource],
     if (optionalExporter.isEmpty)
       throw new IllegalArgumentException(s"Exporter not provided. Expected at least one exporter.")
 
-    (optionalSource.get, optionalConverter.get, asciiFilters, optionalExporter.get)
+    (optionalSource.get, optionalConverter.get, greyscaleMediaFilters, asciiFilters, optionalExporter.get)
   }
 }

@@ -1,9 +1,9 @@
 package converter.mapper
 
 import common.mapper.AssetMapper
-import converter.service.AsciiConverter
-import converter.service.linear.{LinearAsciiConverter, PaulBourkesAsciiConverter}
-import converter.service.nonlinear.DollarDominantAsciiConverter
+import converter.service.ascii.AsciiConverter
+import converter.service.ascii.linear.{LinearAsciiConverter, PaulBourkesAsciiConverter}
+import converter.service.ascii.nonlinear.DollarDominantAsciiConverter
 import parser.domain.AssetHandler
 
 class ConverterMapper extends AssetMapper[AsciiConverter] {

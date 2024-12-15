@@ -1,6 +1,6 @@
 package source.service.importer
 
-import common.domain.frame.pixel.media.{Media, MultiFramer}
+import common.domain.media.pixel.{MultiFramePixelMedia, PixelMedia}
 import source.service.MediaSource
 
 import java.awt.image.BufferedImage
@@ -10,14 +10,14 @@ import javax.imageio.stream.ImageInputStream
 import scala.collection.mutable.ArrayBuffer
 
 class MultiFramerImporter(private val file: File) extends MediaSource {
-  override def provideMedia(): Media = {
+  override def provideMedia(): PixelMedia = {
     try {
       val bufferedImages = extractBufferedImages
       
       if (bufferedImages.isEmpty)
         throw new IllegalArgumentException(s"Empty GIF in file: ${file.getAbsolutePath}")
       
-      new MultiFramer(bufferedImages)
+      new MultiFramePixelMedia(bufferedImages)
     } catch {
       case e: Exception =>
         throw new RuntimeException(s"Error processing GIF file: ${file.getAbsolutePath}", e)

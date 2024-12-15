@@ -1,7 +1,7 @@
 package source.service
 
-import common.domain.frame.pixel.media.Media
+import common.domain.media.pixel.PixelMedia
 
 trait MediaSource {
-  def provideMedia(): Media
+  def provideMedia(): PixelMedia
 }

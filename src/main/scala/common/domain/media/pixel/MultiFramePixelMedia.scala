@@ -5,15 +5,13 @@ import common.domain.pixel.Pixel
 
 import java.awt.image.BufferedImage
 
-class MultiFramePixelMedia(bufferedImages: Seq[BufferedImage]) extends PixelMedia {
-  private val frames: Seq[PixelFrame] = bufferedImages.map { bufferedImage =>
+class MultiFramePixelMedia(bufferedImages: Seq[BufferedImage]) extends PixelMedia(
+  bufferedImages.map { bufferedImage =>
     val pixels = (0 until bufferedImage.getHeight).map { y =>
       (0 until bufferedImage.getWidth).map { x =>
         new Pixel(bufferedImage.getRGB(x, y))
       }
     }
     new PixelFrame(pixels)
-  }
-
-  override def getFrames: Seq[PixelFrame] = frames
-}
+  }  
+)

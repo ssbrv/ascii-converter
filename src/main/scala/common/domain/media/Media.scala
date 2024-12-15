@@ -2,6 +2,6 @@ package common.domain.media
 
 import common.domain.frame.Frame
 
-trait Media[T] {
-  def getFrames: Seq[Frame[T]]
+case class Media[T](frames: Seq[Frame[T]]) extends Iterable[Frame[T]] {
+  override def iterator: Iterator[Frame[T]] = frames.iterator
 }

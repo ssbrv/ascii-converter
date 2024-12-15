@@ -1,19 +1,21 @@
 package filter.service.greyscale
 
-import common.domain.frame.Frame
-import common.domain.media.Media
+import common.domain.frame.greyscale.GreyscaleFrame
+import common.domain.greyscale.GreyscaleValue
+import common.domain.media.greyscale.GreyscaleMedia
 
 class InvertFilter extends GreyscaleMediaFilter {
-  override def apply(media: Media[Int]): Media[Int] = {
-    new Media[Int]:
-      override def getFrames: Seq[Frame[Int]] =
-        for (frame <- media.getFrames) yield
-          new Frame(
-            for (y <- 0 until frame.getHeight) yield
-              for (x <- 0 until frame.getWidth) yield
-                invert(frame(x)(y))
-          )
+  override def apply(media: GreyscaleMedia): GreyscaleMedia = {
+    val frames =
+      for (frame <- media.frames) yield
+        new GreyscaleFrame(
+          for (y <- 0 until frame.height) yield
+            for (x <- 0 until frame.width) yield
+              invert(frame(x)(y))
+        )
+
+    new GreyscaleMedia(frames)
   }
 
-  private def invert(greyscale: Int) = 255 - greyscale
+  private def invert(greyscale: GreyscaleValue): GreyscaleValue = GreyscaleValue(GreyscaleValue.MAX_VALUE - greyscale.value)
 }

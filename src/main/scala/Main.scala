@@ -1,6 +1,6 @@
 
 import converter.mapper.ConverterMapper
-import converter.service.greyscale.{GreyscaleConverter, GreyscaleConverterImpl}
+import converter.service.greyscale.{GreyscaleConverter, WeightedMethodGreyscaleConverter}
 import exporter.mapper.ExporterMapper
 import filter.mapper.{AsciiFilterMapper, GreyscaleMediaFilterMapper}
 import parser.service.asset.AssetParserImpl
@@ -20,7 +20,7 @@ import source.mapper.SourceMapper
   )
 
   val commandParser: CommandParser = new DoubleDashCommandParser
-  val greyscaleConverter: GreyscaleConverter = new GreyscaleConverterImpl
+  val greyscaleConverter: GreyscaleConverter = new WeightedMethodGreyscaleConverter
 
   val applicationController = ApplicationController(
     commandParser, assetParser, greyscaleConverter

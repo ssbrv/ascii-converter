@@ -1,7 +1,6 @@
 package common.domain.frame.greyscale
 
 import common.domain.frame.Frame
+import common.domain.greyscale.GreyscaleValue
 
-class GreyscaleFrame(data: Seq[Seq[Int]]) extends Frame[Int](data) {
-  require(frame.forall(_.forall(greyscale => greyscale >= 0 && greyscale <= 255)), s"Invalid greyscale value: ${frame.toString()}")
-}
+type GreyscaleFrame = Frame[GreyscaleValue] 

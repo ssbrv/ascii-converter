@@ -1,6 +1,7 @@
 package converter.service.greyscale
 
+import common.domain.greyscale.GreyscaleValue
 import common.domain.pixel.Pixel
 import converter.service.MediaConverter
 
-trait GreyscaleConverter extends MediaConverter[Pixel, Int]
+type GreyscaleConverter = MediaConverter[Pixel, GreyscaleValue]

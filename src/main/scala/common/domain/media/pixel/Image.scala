@@ -5,7 +5,7 @@ import common.domain.pixel.Pixel
 
 import java.awt.image.BufferedImage
 
-class Image(private val frame: PixelFrame) extends PixelMedia {
+class Image(frame: PixelFrame) extends PixelMedia(Seq(frame)) {
 
   def this(bufferedImage: BufferedImage) = this(
     new PixelFrame(
@@ -17,6 +17,4 @@ class Image(private val frame: PixelFrame) extends PixelMedia {
   )
 
   def this(pixels: Seq[Seq[Pixel]]) = this(new PixelFrame(pixels))
-
-  override def getFrames: Seq[PixelFrame] = Seq(frame)
 }

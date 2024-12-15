@@ -1,5 +1,6 @@
 package filter.service.greyscale
 
+import common.domain.greyscale.GreyscaleValue
 import filter.service.MediaFilter
 
-trait GreyscaleMediaFilter extends MediaFilter[Int]
+type GreyscaleMediaFilter = MediaFilter[GreyscaleValue]

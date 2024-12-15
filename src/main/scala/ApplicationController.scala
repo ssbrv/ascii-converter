@@ -1,3 +1,5 @@
+import common.domain.media.greyscale.GreyscaleMedia
+import common.domain.media.pixel.PixelMedia
 import converter.service.greyscale.GreyscaleConverter
 import parser.service.asset.AssetParser
 import parser.service.command.CommandParser
@@ -7,8 +9,8 @@ class ApplicationController(private val commandParser: CommandParser, private va
     val commands = commandParser.parseArgumentsIntoCommands(arguments)
     val (importer, converter, greyscaleMediaFilters, asciiFilters, exporter) = assetParser.parseArgumentsIntoAssets(commands)
 
-    val pixelMedia = importer.provideMedia()
-    var greyscaleMedia = grayscaleConverter.convert(pixelMedia)
+    val pixelMedia: PixelMedia = importer.provideMedia()
+    var greyscaleMedia: GreyscaleMedia = grayscaleConverter.convert(pixelMedia)
     
     for (filter <- greyscaleMediaFilters)
       greyscaleMedia = filter.apply(greyscaleMedia)

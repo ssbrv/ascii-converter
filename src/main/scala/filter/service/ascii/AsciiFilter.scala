@@ -1,5 +1,6 @@
 package filter.service.ascii
 
+import common.domain.media.ascii.AsciiMedia
 import filter.service.MediaFilter
 
-trait AsciiFilter extends MediaFilter[Char]
+type AsciiFilter = MediaFilter[Char]

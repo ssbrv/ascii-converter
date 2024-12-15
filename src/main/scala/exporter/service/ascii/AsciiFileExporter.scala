@@ -1,19 +1,20 @@
 package exporter.service.ascii
 
-import common.domain.media.Media
+import common.domain.media.ascii.AsciiMedia
+
 import java.io.{File, FileWriter, IOException}
 import java.nio.file.Files
 
 class AsciiFileExporter(private val file: File) extends AsciiExporter {
 
-  override def exportMedia(ascii: Media[Char]): Unit = {
-    if (ascii.getFrames.isEmpty)
+  override def exportMedia(ascii: AsciiMedia): Unit = {
+    if (ascii.frames.isEmpty)
       throw new IllegalArgumentException("No ascii art was produced from given source.")
 
-    if (ascii.getFrames.length > 1)
+    if (ascii.frames.length > 1)
       throw new IllegalArgumentException("Multiframe ascii art export is not supported yet")
 
-    val asciiFrame = ascii.getFrames.last
+    val asciiFrame = ascii.frames.last
 
     if (file.exists() && !isPlainTextFile(file))
       throw new IllegalArgumentException(s"File '${file.getName}' already exists and is not a plain text file.")

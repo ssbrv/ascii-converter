@@ -1,33 +1,31 @@
 package exporter.service.ascii
 
-import common.domain.frame.Frame
-import common.domain.media.Media
+import common.domain.frame.ascii.AsciiFrame
+import common.domain.media.ascii.AsciiMedia
 
 class AsciiConsolePrinter extends AsciiExporter {
-  override def exportMedia(ascii: Media[Char]): Unit = {
-    val asciiFrames = ascii.getFrames
-
-    if (asciiFrames.isEmpty)
+  override def exportMedia(ascii: AsciiMedia): Unit = {
+    if (ascii.frames.isEmpty)
       return
 
-    if (asciiFrames.length == 1) {
-      printAsciiFrame(asciiFrames.last)
+    if (ascii.frames.length == 1) {
+      printAsciiFrame(ascii.frames.last)
       return
     }
 
-    animateAsciiFrames(asciiFrames)
+    animateAscii(ascii)
   }
 
-  private def printAsciiFrame(asciiFrame: Frame[Char]): Unit = {
+  private def printAsciiFrame(asciiFrame: AsciiFrame): Unit = {
     for (row <- asciiFrame)
       println(row.mkString)
   }
 
-  private def animateAsciiFrames(asciiFrames: Seq[Frame[Char]]): Unit = {
-    for (frame <- asciiFrames) {
+  private def animateAscii(ascii: AsciiMedia): Unit = {
+    for (frame <- ascii) {
       clearConsole()
       printAsciiFrame(frame)
-      Thread.sleep(200)
+      Thread.sleep(80) // TODO: replace with media frame rate
     }
   }
 

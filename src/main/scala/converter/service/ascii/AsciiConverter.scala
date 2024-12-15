@@ -1,5 +1,6 @@
 package converter.service.ascii
 
+import common.domain.greyscale.GreyscaleValue
 import converter.service.MediaConverter
 
-trait AsciiConverter extends MediaConverter[Int, Char]
+type AsciiConverter = MediaConverter[GreyscaleValue, Char]

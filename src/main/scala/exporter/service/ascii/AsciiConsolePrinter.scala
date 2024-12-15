@@ -25,7 +25,7 @@ class AsciiConsolePrinter extends AsciiExporter {
     for (frame <- ascii) {
       clearConsole()
       printAsciiFrame(frame)
-      Thread.sleep(80) // TODO: replace with media frame rate
+      Thread.sleep(50) // TODO: replace with media frame rate
     }
   }
 

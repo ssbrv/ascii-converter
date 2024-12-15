@@ -1,7 +1,6 @@
 package source.service.importer
 
 import common.domain.media.pixel.{MultiFramePixelMedia, PixelMedia}
-import source.service.MediaSource
 
 import java.awt.image.BufferedImage
 import java.io.File
@@ -9,7 +8,7 @@ import javax.imageio.ImageIO
 import javax.imageio.stream.ImageInputStream
 import scala.collection.mutable.ArrayBuffer
 
-class MultiFramerImporter(private val file: File) extends MediaSource {
+class MultiFramerImporter(private val file: File) extends FileImporter {
   override def provideMedia(): PixelMedia = {
     try {
       val bufferedImages = extractBufferedImages

@@ -1,16 +1,26 @@
-package source.mapper
+package source.registry
 
-import common.mapper.AssetMapper
-import parser.domain.AssetHandler
-import source.mapper.importer.FileImporterMapper
+import common.registry.AssetRegistry
+import parser.domain.{AssetHandler, ParameterCountSet, ParameterCountSingle}
+import source.mapper.FileImporterMapper
 import source.service.MediaSource
+import source.service.importer.FileImporter
 import source.service.random.{RandomImageGenerator, SmallImageGenerator}
 
-class SourceMapper(fileImporterMapper: FileImporterMapper) extends AssetMapper[MediaSource] {
+class SourceRegistry(fileImporterMapper: FileImporterMapper) extends AssetRegistry[MediaSource] {
   private val sourceHandlers: Map[String, AssetHandler[MediaSource]] = Map(
-    "image" -> AssetHandler[MediaSource](params => fileImporterMapper.map(params.last), Set(1)),
-    "image-random" -> AssetHandler[MediaSource](params => createGenerator(params), Set(0, 2)),
+    "image" -> AssetHandler[MediaSource](createImporter, new ParameterCountSingle(1)),
+    "image-random" -> AssetHandler[MediaSource](createGenerator, new ParameterCountSet(Set(0, 2))),
   )
+  
+  private def createImporter(params: Seq[String]): FileImporter = {
+    fileImporterMapper.map(params.last).getOrElse(
+      throw new IllegalArgumentException(
+        s"Provided unsupported file type: ${fileImporterMapper.detectFileType(params.last)}. " + 
+          s"Allowed: ${fileImporterMapper.getAllowedFileTypes.mkString(", ")}"
+      )
+    )
+  }
 
   private def createGenerator(params: Seq[String]): RandomImageGenerator = {
     if (params.isEmpty)
@@ -37,6 +47,6 @@ class SourceMapper(fileImporterMapper: FileImporterMapper) extends AssetMapper[M
     new RandomImageGenerator(width, width, height, height)
   }
 
-  override protected def getAssetHandler(commandName: String): Option[AssetHandler[MediaSource]] = sourceHandlers.get(commandName)
+  override def getAssetHandler(commandName: String): Option[AssetHandler[MediaSource]] = sourceHandlers.get(commandName)
   override def createDefault: Option[MediaSource] = None // Some(new SmallImageGenerator)
 }

@@ -3,11 +3,12 @@ package common.domain.frame
 import org.scalatest.funsuite.AnyFunSuite
 
 class FrameTest extends AnyFunSuite {
-  def testValidFrame[T](frameData: Seq[Seq[T]], width: Int, height: Int): Unit = {
-    test(s"Constructing a $width X $height frame succeeds and content matches") {
-      val frame = Frame(frameData)
+  def testValidFrame[T](frameData: Seq[Seq[T]], width: Int, height: Int, frameDelay: Int = 0): Unit = {
+    test(s"Constructing a $width X $height frame with frame delay of $frameDelay succeeds and content matches") {
+      val frame = Frame(frameData, frameDelay)
       assert(frame.width == width)
       assert(frame.height == height)
+      assert(frame.delay == frameDelay)
     }
   }
 
@@ -29,6 +30,8 @@ class FrameTest extends AnyFunSuite {
   ), 3, 2)
 
   testValidFrame(Seq(), 0, 0)
+
+  testValidFrame(Seq(), 0, 0, 1000)
 
   test("Constructing a Frame with unequal-length rows throws an exception") {
     val frameData = Seq(
@@ -68,6 +71,12 @@ class FrameTest extends AnyFunSuite {
 
     assertThrows[Exception] {
       frame(0)(2)
+    }
+  }
+
+  test("Constructing a frame with negative frame delay throws an exception") {
+    assertThrows[Exception] {
+      Frame(Seq(), -1000)
     }
   }
 }

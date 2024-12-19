@@ -1,5 +1,6 @@
 package exporter.service.ascii
 
+import common.domain.frame.ascii.AsciiFrame
 import common.domain.media.ascii.AsciiMedia
 
 import java.io.{File, FileWriter, IOException}
@@ -11,11 +12,6 @@ class AsciiFileExporter(private val file: File) extends AsciiExporter {
     if (ascii.frames.isEmpty)
       throw new IllegalArgumentException("No ascii art was produced from given source.")
 
-    if (ascii.frames.length > 1)
-      throw new IllegalArgumentException("Multiframe ascii art export is not supported yet")
-
-    val asciiFrame = ascii.frames.last
-
     if (file.exists() && !isPlainTextFile(file))
       throw new IllegalArgumentException(s"File '${file.getName}' already exists and is not a plain text file.")
 
@@ -23,14 +19,35 @@ class AsciiFileExporter(private val file: File) extends AsciiExporter {
       throw new IOException(s"Failed to create new file: '${file.getAbsolutePath}'")
 
     val writer = new FileWriter(file)
+
     try {
-      writer.write("")
-      for (row <- asciiFrame) {
-        writer.append(row.mkString)
-        writer.append('\n')
+      if (ascii.frames.length == 1) {
+        printFrame(ascii.frames.last, writer)
+        writer.close()
+        return
       }
+
+      for (frame <- ascii) {
+        printFrameMetadata(frame, writer)
+        printFrame(frame, writer)
+      }
+    }
+    catch {
+      case e: Exception =>
+        throw new RuntimeException("Unexpected error occurred while exporting multi frame ascii art to file", e)
     } finally {
       writer.close()
+    }
+  }
+
+  private def printFrameMetadata(frame: AsciiFrame, writer: FileWriter): Unit = {
+    writer.append(s"===== ${frame.delay} =====\n")
+  }
+
+  private def printFrame(frame: AsciiFrame, writer: FileWriter): Unit = {
+    for (row <- frame) {
+      writer.append(row.mkString)
+      writer.append('\n')
     }
   }
 

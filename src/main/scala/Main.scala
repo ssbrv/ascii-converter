@@ -1,21 +1,28 @@
 
-import converter.mapper.ConverterMapper
+import common.mapper.AssetMapperImpl
+import converter.registry.ConverterRegistry
 import converter.service.greyscale.WeightedMethodGreyscaleConverter
-import exporter.mapper.ExporterMapper
-import filter.mapper.{AsciiFilterMapper, GreyscaleMediaFilterMapper}
+import exporter.registry.ExporterRegistry
+import filter.registry.{AsciiFilterRegistry, GreyscaleMediaFilterRegistry}
 import parser.service.asset.AssetParserImpl
 import parser.service.command.DoubleDashCommandParser
-import source.mapper.SourceMapper
-import source.mapper.importer.FileImporterMapperImpl
+import source.mapper.FileImporterMapperImpl
+import source.registry.SourceRegistry
 
 @main def main(arguments: String*): Unit = {
   val fileImporterMapper = new FileImporterMapperImpl
-  val sourceMapper = new SourceMapper(fileImporterMapper)
-  val converterMapper = new ConverterMapper
-  val greyscaleMediaFilterMapper = new GreyscaleMediaFilterMapper
-  val asciiFilterMapper = new AsciiFilterMapper
-  val exporterMapper = new ExporterMapper
+  val sourceRegistry = new SourceRegistry(fileImporterMapper)
+  val converterRegistry = new ConverterRegistry
+  val greyscaleMediaFilterRegistry = new GreyscaleMediaFilterRegistry
+  val asciiFilterRegistry = new AsciiFilterRegistry
+  val exporterRegistry = new ExporterRegistry
 
+  val sourceMapper = new AssetMapperImpl(sourceRegistry)
+  val converterMapper = new AssetMapperImpl(converterRegistry)
+  val greyscaleMediaFilterMapper = new AssetMapperImpl(greyscaleMediaFilterRegistry)
+  val asciiFilterMapper = new AssetMapperImpl(asciiFilterRegistry)
+  val exporterMapper = new AssetMapperImpl(exporterRegistry)
+  
   val assetParser = new AssetParserImpl(
     sourceMapper, converterMapper, greyscaleMediaFilterMapper, asciiFilterMapper, exporterMapper
   )

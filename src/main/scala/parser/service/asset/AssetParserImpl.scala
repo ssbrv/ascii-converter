@@ -6,7 +6,6 @@ import exporter.service.ascii.AsciiExporter
 import filter.service.ascii.AsciiFilter
 import filter.service.greyscale.GreyscaleMediaFilter
 import parser.domain.Command
-import parser.service.command.CommandParser
 import parser.utils.CommandStream
 import source.service.MediaSource
 

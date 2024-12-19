@@ -61,7 +61,7 @@ class MultiFramerImporter(private val file: File) extends FileImporter {
     if (bufferedImages.isEmpty)
       throw new IllegalArgumentException(s"Empty GIF in file: ${file.getAbsolutePath}")
 
-    new MultiFramePixelMedia(bufferedImages.toSeq, calculateAverageFrameDelay(frameDelays.toSeq))
+    new MultiFramePixelMedia(bufferedImages.toSeq, frameDelays.toSeq)
   }
 
   private def compositeFrame(
@@ -90,17 +90,12 @@ class MultiFramerImporter(private val file: File) extends FileImporter {
     val height = screenDescriptorNode.getAttribute("logicalScreenHeight").toInt
     (width, height)
   }
-
-  private def calculateAverageFrameDelay(frameDelays: Seq[Int]): Int = {
-    if (frameDelays.isEmpty) return 0
-    (frameDelays.sum.toDouble / frameDelays.size).toInt
-  }
-
+  
   private def extractFrameDelay(metadata: IIOMetadata): Int = {
     val metaFormatName = metadata.getNativeMetadataFormatName
     val root: IIOMetadataNode = metadata.getAsTree(metaFormatName).asInstanceOf[IIOMetadataNode]
     val graphicsControlExtensionNode: IIOMetadataNode = getNode(root, "GraphicControlExtension")
-    graphicsControlExtensionNode.getAttribute("delayTime").toInt
+    graphicsControlExtensionNode.getAttribute("delayTime").toInt * 10
   }
 
   private def getNode(rootNode: IIOMetadataNode, nodeName: String): IIOMetadataNode = {

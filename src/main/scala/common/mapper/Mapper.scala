@@ -1,6 +1,6 @@
 package common.mapper
 
-trait Mapper[M, T] {
-  def map(value: M): Option[T]
+trait Mapper[F, T] {
+  def map(value: F): Option[T]
 }
 

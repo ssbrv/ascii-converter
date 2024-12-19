@@ -11,9 +11,11 @@ abstract class MediaConverterImpl[F, T] extends MediaConverter[F, T] {
           for (y <- 0 until frame.height) yield
             for (x <- 0 until frame.width) yield
               convert(frame(x)(y))
+          ,
+          frame.delay
         )
 
-    new Media[T](frames, media.frameDelay)
+    new Media[T](frames)
   }
   
   protected def convert(value: F): T

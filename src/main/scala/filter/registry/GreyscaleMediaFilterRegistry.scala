@@ -1,13 +1,12 @@
-package filter.mapper
+package filter.registry
 
-import common.mapper.AssetMapper
+import common.registry.AssetRegistry
 import filter.service.greyscale.{BrightnessFilter, GreyscaleMediaFilter, InvertFilter}
-import parser.domain.AssetHandler
+import parser.domain.{AssetHandler, ParameterCountSingle}
 
-class GreyscaleMediaFilterMapper extends AssetMapper[GreyscaleMediaFilter] {
+class GreyscaleMediaFilterRegistry extends AssetRegistry[GreyscaleMediaFilter] {
   private val filterHandlers: Map[String, AssetHandler[GreyscaleMediaFilter]] = Map(
-    "rotate" -> AssetHandler[GreyscaleMediaFilter](params => null, Set(1, 2)),
-    "brightness" -> AssetHandler[GreyscaleMediaFilter](createBrightnessFilter, Set(1)),
+    "brightness" -> AssetHandler[GreyscaleMediaFilter](createBrightnessFilter, new ParameterCountSingle(1)),
     "invert" -> AssetHandler[GreyscaleMediaFilter](_ => new InvertFilter),
   )
 
@@ -22,5 +21,5 @@ class GreyscaleMediaFilterMapper extends AssetMapper[GreyscaleMediaFilter] {
     new BrightnessFilter(brightnessDelta)
   }
 
-  override protected def getAssetHandler(commandName: String): Option[AssetHandler[GreyscaleMediaFilter]] = filterHandlers.get(commandName)
+  override def getAssetHandler(commandName: String): Option[AssetHandler[GreyscaleMediaFilter]] = filterHandlers.get(commandName)
 }

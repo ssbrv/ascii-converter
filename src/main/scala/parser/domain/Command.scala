@@ -1,3 +1,3 @@
 package parser.domain
 
-case class Command(name: String, parameters: Seq[String])
+case class Command(name: String, parameters: Seq[String] = Seq.empty)

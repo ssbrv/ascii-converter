@@ -45,19 +45,4 @@ class PixelTest extends AnyFunSuite {
   testInvalidPixel(200, 256, 200)
   testInvalidPixel(200, 200, -1)
   testInvalidPixel(200, 200, 256)
-
-
-//  def testGreyscale(red: Int, green: Int, blue: Int, greyscale: Int): Unit = {
-//    test(s"Greyscale of pixel ($red, $green, $blue) is ${greyscale}") {
-//      val pixel = new Pixel(red, green, blue)
-//      assert(pixel.greyscale == greyscale)
-//    }
-//  }
-//
-//  testGreyscale(200, 200, 200, 200)
-//  testGreyscale(0, 0, 0, 0)
-//  testGreyscale(255, 255, 255, 255)
-//  testGreyscale(200, 255, 0, 210)
-//  testGreyscale(255, 200, 0, 194)
-//  testGreyscale(0, 255, 200, 172)
 }

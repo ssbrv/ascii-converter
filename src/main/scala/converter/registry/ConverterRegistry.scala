@@ -1,15 +1,15 @@
-package converter.mapper
+package converter.registry
 
-import common.mapper.AssetMapper
+import common.registry.AssetRegistry
 import converter.service.ascii.AsciiConverter
 import converter.service.ascii.linear.{LinearAsciiConverter, PaulBourkesAsciiConverter}
 import converter.service.ascii.nonlinear.DollarDominantAsciiConverter
-import parser.domain.AssetHandler
+import parser.domain.{AssetHandler, ParameterCountSingle}
 
-class ConverterMapper extends AssetMapper[AsciiConverter] {
+class ConverterRegistry extends AssetRegistry[AsciiConverter] {
   private val converterHandlers: Map[String, AssetHandler[AsciiConverter]] = Map(
-    "table" -> AssetHandler[AsciiConverter](params => createPredefined(params.last), Set(1)),
-    "custom-table" -> AssetHandler[AsciiConverter](params => createCustomLinear(params.last), Set(1)),
+    "table" -> AssetHandler[AsciiConverter](params => createPredefined(params.last), new ParameterCountSingle(1)),
+    "custom-table" -> AssetHandler[AsciiConverter](params => createCustomLinear(params.last), new ParameterCountSingle(1)),
   )
 
   private val predefined: Map[String, () => AsciiConverter] = Map(
@@ -17,7 +17,7 @@ class ConverterMapper extends AssetMapper[AsciiConverter] {
     "dollar-dominant" -> (() => new DollarDominantAsciiConverter)
   )
 
-  override protected def getAssetHandler(commandName: String): Option[AssetHandler[AsciiConverter]] = converterHandlers.get(commandName)
+  override def getAssetHandler(commandName: String): Option[AssetHandler[AsciiConverter]] = converterHandlers.get(commandName)
 
   private def createPredefined(name: String): AsciiConverter = {
     predefined.getOrElse(

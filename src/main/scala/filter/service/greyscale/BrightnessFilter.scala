@@ -12,9 +12,11 @@ class BrightnessFilter(private val brightnessDelta: Int) extends GreyscaleMediaF
           for (y <- 0 until frame.height) yield
             for (x <- 0 until frame.width) yield
               applyBrightnessDelta(frame(x)(y))
+          ,
+          frame.delay
         )
 
-    new GreyscaleMedia(frames, media.frameDelay)
+    new GreyscaleMedia(frames)
   }
 
   private def applyBrightnessDelta(greyscale: GreyscaleValue): GreyscaleValue = {

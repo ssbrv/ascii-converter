@@ -1,14 +1,12 @@
-package filter.mapper
+package filter.registry
 
-import common.mapper.AssetMapper
+import common.registry.AssetRegistry
 import filter.service.ascii.{AsciiFilter, FontAspectRationFilter}
-import parser.domain.AssetHandler
+import parser.domain.{AssetHandler, ParameterCountSingle}
 
-class AsciiFilterMapper extends AssetMapper[AsciiFilter] {
+class AsciiFilterRegistry extends AssetRegistry[AsciiFilter] {
   private val filterHandlers: Map[String, AssetHandler[AsciiFilter]] = Map(
-    "rotate" -> AssetHandler[AsciiFilter](params => null, Set(1, 2)),
-    "scale" -> AssetHandler[AsciiFilter](params => null, Set(1, 2)),
-    "font-aspect-ratio" -> AssetHandler[AsciiFilter](params => createFontAspectRationFilter(params), Set(1)),
+    "font-aspect-ratio" -> AssetHandler[AsciiFilter](params => createFontAspectRationFilter(params), new ParameterCountSingle(1)),
   )
 
   private def createFontAspectRationFilter(params: Seq[String]): FontAspectRationFilter = {
@@ -34,5 +32,5 @@ class AsciiFilterMapper extends AssetMapper[AsciiFilter] {
     new FontAspectRationFilter(x, y)
   }
 
-  override protected def getAssetHandler(commandName: String): Option[AssetHandler[AsciiFilter]] = filterHandlers.get(commandName)
+  override def getAssetHandler(commandName: String): Option[AssetHandler[AsciiFilter]] = filterHandlers.get(commandName)
 }

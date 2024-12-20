@@ -4,7 +4,7 @@ import common.domain.frame.greyscale.GreyscaleFrame
 import common.domain.greyscale.GreyscaleValue
 import common.domain.media.greyscale.GreyscaleMedia
 
-class BrightnessFilter(private val brightnessDelta: Int) extends GreyscaleMediaFilter {
+class BrightnessFilter(val brightnessDelta: Int) extends GreyscaleMediaFilter {
   override def apply(media: GreyscaleMedia): GreyscaleMedia = {
     val frames =
       for (frame <- media.frames) yield

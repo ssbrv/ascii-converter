@@ -2,11 +2,11 @@ package exporter.service.ascii
 
 import common.domain.frame.ascii.AsciiFrame
 import common.domain.media.ascii.AsciiMedia
+import common.utils.file.FileManager
 
 import java.io.{File, FileWriter, IOException}
-import java.nio.file.Files
 
-class AsciiFileExporter(private val file: File) extends AsciiExporter {
+class AsciiFileExporter(val file: File, val fileManager: FileManager) extends AsciiExporter {
 
   override def exportMedia(ascii: AsciiMedia): Unit = {
     if (ascii.frames.isEmpty)
@@ -52,11 +52,7 @@ class AsciiFileExporter(private val file: File) extends AsciiExporter {
   }
 
   private def isPlainTextFile(file: File): Boolean = {
-    try {
-      val mimeType = Files.probeContentType(file.toPath)
-      mimeType != null && mimeType.startsWith("text/")
-    } catch {
-      case _: IOException => false
-    }
+    val fileType = fileManager.detectFileType(file)
+    fileType.isDefined && fileType.get == "txt"
   }
 }

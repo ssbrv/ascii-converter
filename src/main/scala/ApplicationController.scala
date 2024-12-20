@@ -7,9 +7,9 @@ import parser.service.command.CommandParser
 class ApplicationController(private val commandParser: CommandParser, private val assetParser: AssetParser, private val grayscaleConverter: GreyscaleConverter) {
   def run(arguments: Seq[String]): Unit = {
     val commands = commandParser.parseArgumentsIntoCommands(arguments)
-    val (importer, converter, greyscaleMediaFilters, asciiFilters, exporter) = assetParser.parseArgumentsIntoAssets(commands)
+    val (source, converter, greyscaleMediaFilters, asciiFilters, exporter) = assetParser.parseArgumentsIntoAssets(commands)
 
-    val pixelMedia: PixelMedia = importer.provideMedia()
+    val pixelMedia: PixelMedia = source.provideMedia()
     var greyscaleMedia: GreyscaleMedia = grayscaleConverter.convert(pixelMedia)
     
     for (filter <- greyscaleMediaFilters)

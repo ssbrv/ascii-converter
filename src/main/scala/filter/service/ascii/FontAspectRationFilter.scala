@@ -4,7 +4,7 @@ import common.domain.frame.Frame
 import common.domain.frame.ascii.AsciiFrame
 import common.domain.media.ascii.AsciiMedia
 
-class FontAspectRationFilter(private val x: Int, private val y: Int) extends AsciiFilter {
+class FontAspectRationFilter(val x: Int, val y: Int) extends AsciiFilter {
   override def apply(media: AsciiMedia): AsciiMedia = {
     val adjustedFrames = media.frames.map(frame => adjustFrame(frame))
     new AsciiMedia(adjustedFrames)

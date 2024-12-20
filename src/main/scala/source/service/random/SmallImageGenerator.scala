@@ -1,3 +1,3 @@
 package source.service.random
 
-class SmallImageGenerator extends RandomImageGenerator(20, 200, 20, 400)
+class SmallImageGenerator(seed: Long = System.nanoTime()) extends RandomImageGenerator(20, 200, 20, 400, seed)

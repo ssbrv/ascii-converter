@@ -4,7 +4,7 @@ import common.domain.greyscale.GreyscaleValue
 import converter.service.MediaConverterImpl
 import converter.service.ascii.AsciiConverter
 
-class LinearAsciiConverter(protected val gradient: String) extends MediaConverterImpl[GreyscaleValue, Char] with AsciiConverter {
+class LinearAsciiConverter(val gradient: String) extends MediaConverterImpl[GreyscaleValue, Char] with AsciiConverter {
     
   require(gradient != null && gradient.nonEmpty, "Provided empty gradient for Ascii Linear Converter.")
   require(gradient.length <= 255, "Provided too long gradient for Ascii Linear Converter. It has to be 255 characters at most.")

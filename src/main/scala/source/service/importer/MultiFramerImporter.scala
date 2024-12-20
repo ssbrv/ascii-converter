@@ -11,7 +11,7 @@ import javax.imageio.stream.ImageInputStream
 import scala.collection.mutable.ArrayBuffer
 import scala.util.boundary
 
-class MultiFramerImporter(private val file: File) extends FileImporter {
+class MultiFramerImporter(val file: File) extends FileImporter {
   override def provideMedia(): PixelMedia = {
     try {
       createMultiFramePixelMedia

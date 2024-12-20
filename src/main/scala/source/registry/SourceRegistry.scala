@@ -1,25 +1,49 @@
 package source.registry
 
 import common.registry.AssetRegistry
+import common.utils.file.FileManager
 import parser.domain.{AssetHandler, ParameterCountSet, ParameterCountSingle}
-import source.mapper.FileImporterMapper
 import source.service.MediaSource
-import source.service.importer.FileImporter
+import source.service.importer.{FileImporter, MultiFramerImporter, ImageImporter}
 import source.service.random.{RandomImageGenerator, SmallImageGenerator}
 
-class SourceRegistry(fileImporterMapper: FileImporterMapper) extends AssetRegistry[MediaSource] {
+import java.io.File
+
+class SourceRegistry(private val fileManager: FileManager) extends AssetRegistry[MediaSource] {
   private val sourceHandlers: Map[String, AssetHandler[MediaSource]] = Map(
     "image" -> AssetHandler[MediaSource](createImporter, new ParameterCountSingle(1)),
     "image-random" -> AssetHandler[MediaSource](createGenerator, new ParameterCountSet(Set(0, 2))),
   )
+
+  private val definedFormatsForImport: Map[String, File => FileImporter] = Map(
+    "jpeg" -> createImageImporter,
+    "jpg" -> createImageImporter,
+    "png" -> createImageImporter,
+    "gif" -> createMultiFramerImporter
+  )
+  private val allowedFileTypes = definedFormatsForImport.map((fileType, _) => fileType).toSeq
   
   private def createImporter(params: Seq[String]): FileImporter = {
-    fileImporterMapper.map(params.last).getOrElse(
-      throw new IllegalArgumentException(
-        s"Provided unsupported file type: ${fileImporterMapper.detectFileType(params.last)}. " + 
-          s"Allowed: ${fileImporterMapper.getAllowedFileTypes.mkString(", ")}"
-      )
-    )
+    val filePath = params.last
+
+    val file = new File(filePath)
+
+    if (!fileManager.exists(file))
+      throw new IllegalArgumentException(s"File does not exist: $filePath")
+
+    if (!fileManager.isFile(file))
+      throw new IllegalArgumentException(s"$filePath is not a file")
+
+    if (!fileManager.canRead(file))
+      throw new IllegalArgumentException(s"Cannot read from file: $filePath")
+
+    val fileType = fileManager.detectFileType(file)
+      .getOrElse(throw new IllegalArgumentException(s"Could not determine file type: $filePath"))
+
+    definedFormatsForImport.getOrElse(fileType, throw new IllegalArgumentException(
+      s"Provided unsupported file type: $file. " +
+        s"Allowed: ${allowedFileTypes.mkString(", ")}"
+    )).apply(file)
   }
 
   private def createGenerator(params: Seq[String]): RandomImageGenerator = {
@@ -46,6 +70,9 @@ class SourceRegistry(fileImporterMapper: FileImporterMapper) extends AssetRegist
 
     new RandomImageGenerator(width, width, height, height)
   }
+
+  private def createMultiFramerImporter(file: File): MultiFramerImporter = new MultiFramerImporter(file)
+  private def createImageImporter(file: File): ImageImporter = new ImageImporter(file)
 
   override def getAssetHandler(commandName: String): Option[AssetHandler[MediaSource]] = sourceHandlers.get(commandName)
   override def createDefault: Option[MediaSource] = None // Some(new SmallImageGenerator)

@@ -1,14 +1,16 @@
 package converter.service.ascii.nonlinear
 
+import common.domain.greyscale.GreyscaleValue
+
 class DollarDominantAsciiConverter extends NonlinearAsciiConverter(
   Seq(
-    (200, '$'), // 0-200 -> '$'
-    (210, '@'), // 201-210 -> '@'
-    (220, 'B'), // 211-220 -> 'B'
-    (230, '%'), // 221-230 -> '%'
-    (240, '8'), // 231-240 -> '8'
-    (245, '&'), // 241-245 -> '&'
-    (250, 'M'), // 246-250 -> 'M'
-    (255, '.') // 251-255 -> '.'
+    (GreyscaleValue(200), '$'), // 0-200 -> '$'
+    (GreyscaleValue(210), '@'), // 201-210 -> '@'
+    (GreyscaleValue(220), 'B'), // 211-220 -> 'B'
+    (GreyscaleValue(230), '%'), // 221-230 -> '%'
+    (GreyscaleValue(240), '8'), // 231-240 -> '8'
+    (GreyscaleValue(245), '&'), // 241-245 -> '&'
+    (GreyscaleValue(250), 'M'), // 246-250 -> 'M'
+    (GreyscaleValue(255), '.') // 251-255 -> '.'
   )
 )
